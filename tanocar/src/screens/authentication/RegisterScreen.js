@@ -7,10 +7,7 @@ import axios from 'axios'
 import { API_URL } from '../../api/index';
 
 
-
-
 const RegisterScreen = () => {
-
 
     const deviceWidth = Dimensions.get('window').width;
 
@@ -24,6 +21,28 @@ const RegisterScreen = () => {
         account_type: "",
 
     })
+
+    const register_user = (event) => {
+        event.preventDefault()
+        axios
+        .post(API_URL + 'auth/register', {
+            email: credentials.email,
+            password: credentials.password,
+            first_name: credentials.first_name,
+            last_name: credentials.last_name,
+            phone_number: credentials.phone_number,
+            account_type: 'seller',
+            corporate: false,
+            individual: true,
+        })
+        .then((response) => {
+            console.log(response.data)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    }
+
     const [showPassword, setShowPassword] = useState(false)
     const [checked, setChecked] = useState(false);
     // const handleChange = (name) => (event) => {
@@ -43,22 +62,22 @@ const RegisterScreen = () => {
                     label="First Name"
                     mode='outlined'
                     right={<TextInput.Icon icon="account" />}
-                    value={credentials.email}
-                    onChangeText={handleChange('email')}
+                    value={credentials.first_name}
+                    onChangeText={handleChange('first_name')}
                 />
                 <TextInput style={styles.input}
                     label="Last Name"
                     mode='outlined'
                     right={<TextInput.Icon icon="account" />}
-                    value={credentials.email}
-                    onChangeText={handleChange('email')}
+                    value={credentials.last_name}
+                    onChangeText={handleChange('last_name')}
                 />
                 <TextInput style={styles.input}
                     label="Phone Number"
                     mode='outlined'
                     right={<TextInput.Icon icon="phone" />}
-                    value={credentials.email}
-                    onChangeText={handleChange('email')}
+                    value={credentials.phone_number}
+                    onChangeText={handleChange('phone_number')}
                 />
                 <TextInput style={styles.input}
                     label="Email"
@@ -107,7 +126,7 @@ const RegisterScreen = () => {
                         width: deviceWidth,
              
                     }}
-                    onPress={() => console.log('aye')}
+                    onPress={register_user}
                 />
 
 
