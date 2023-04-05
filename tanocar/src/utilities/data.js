@@ -74,10 +74,6 @@ export const doors_type = [
     { key: '4', value: '4' },
     { key: '5', value: '5' },
     { key: '6', value: '6' },
-    { key: '7', value: '7' },
-    { key: '8', value: '8' },
-    { key: '9', value: '9' },
-    { key: '10', value: '10' },
 ]
 
 export const cylinders_type = [
@@ -109,17 +105,54 @@ export const fuel_economy_unit_type = [
 export const mileage_unit_type = [
     { key: 'km', value: 'KM' },
     { key: 'mi', value: 'MI' },
+]
+
+
+export const car_feature = [
+    { key: 'air_conditioning', value: 'Air Conditioning' },
+    { key: 'alarm_system', value: 'Alarm System' },
+    { key: 'alloy_wheels', value: 'Alloy Wheels' },
+    { key: 'anti_lock_braking_system', value: 'Anti-lock Braking System' },
+    { key: 'automatic_headlights', value: 'Automatic Headlights' },
+    { key: 'bluetooth', value: 'Bluetooth' },
+    { key: 'cd_player', value: 'CD Player' },
+    { key: 'cruise_control', value: 'Cruise Control' },
+    { key: 'dvd_player', value: 'DVD Player' },
+    { key: 'electric_seats', value: 'Electric Seats' },
+    { key: 'electric_windows', value: 'Electric Windows' },
+    { key: 'fog_lights', value: 'Fog Lights' },
+    { key: 'heated_seats', value: 'Heated Seats' },
+    { key: 'heated_steering_wheel', value: 'Heated Steering Wheel' },
+    { key: 'keyless_entry', value: 'Keyless Entry' },
+    { key: 'leather_seats', value: 'Leather Seats' },
+    { key: 'navigation_system', value: 'Navigation System' },
+    { key: 'parking_sensors', value: 'Parking Sensors' },
+    { key: 'power_steering', value: 'Power Steering' },
+    { key: 'power_sunroof', value: 'Power Sunroof' },
+    { key: 'power_windows', value: 'Power Windows' },
+    { key: 'premium_sound_system', value: 'Premium Sound System' },
+    { key: 'rear_view_camera', value: 'Rear View Camera' },
+    { key: 'remote_start', value: 'Remote Start' },
+    { key: 'satellite_radio', value: 'Satellite Radio' },
+    { key: 'side_airbags', value: 'Side Airbags' },
+    { key: 'stability_control', value: 'Stability Control' },
+    { key: 'sunroof', value: 'Sunroof' },
+    { key: 'tinted_windows', value: 'Tinted Windows' },
+    { key: 'tire_pressure_monitoring_system', value: 'Tire Pressure Monitoring System' },
+    { key: 'traction_control', value: 'Traction Control' },
+    { key: 'trip_computer', value: 'Trip Computer' },
+    { key: 'usb_input', value: 'USB Input' },
+    { key: 'xenon_headlights', value: 'Xenon Headlights' },
 
 ]
 
-export const price_unit_type = [
-    { key: 'usd', value: 'USD' },
-    { key: 'eur', value: 'EUR' },
-    { key: 'gbp', value: 'GBP' },
-    { key: 'cad', value: 'CAD' },
-    { key: 'aud', value: 'AUD' },
-    { key: 'inr', value: 'INR' },
-    { key: 'zar', value: 'ZAR' },
-    { key: 'nzd', value: 'NZD' },
-    { key: 'aed', value: 'AED' },
-]
+const yea = Array.from(Array(24), (_, index) => index + 2000);
+
+const years = yea.map(year => {
+    return {
+        key: year ,
+        value: year }
+
+}); 
+
+export const year_type = years;

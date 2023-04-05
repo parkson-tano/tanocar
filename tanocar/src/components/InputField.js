@@ -22,7 +22,7 @@ export default function InputField({
                 mode="outlined"
                 keyboardType={keyboardType}
                 multiline={multiline}
-                onChangeText={onChange}
+                onChangeText={(value) => onChange(value, label)}
                 outlineColor='black'
                 activeOutlineColor="blue"
                 value={value}
