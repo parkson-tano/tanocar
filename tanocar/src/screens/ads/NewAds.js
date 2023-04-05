@@ -8,6 +8,7 @@ import InputField from '../../components/InputField';
 import PhotoUpload from '../../components/PhotoUpload';
 import SelectField from '../../components/SelectField';
 import axios from "axios";
+import { fuel_type, transmission_type } from '../../utilities/data';
 const bootstrapStyleSheet = new BootstrapStyleSheet();
 const { s, c } = bootstrapStyleSheet;
 
@@ -48,14 +49,6 @@ const NewAds = () => {
         { key: 'car', value: 'Car' },
         { key: 'motor-cycle', value: 'Motor Cycle' },
     ]
-const options = {
-  method: 'GET',
-  url: 'https://car-api2.p.rapidapi.com/api/years',
-  headers: {
-    'X-RapidAPI-Key': '5faa52bf0bmshc514d81e102214dp174eddjsn474b0a61cce1',
-    'X-RapidAPI-Host': 'car-api2.p.rapidapi.com'
-  }
-};
 
 
     return (
@@ -69,11 +62,25 @@ const options = {
                 <InputField label="Title" multiline={false} />
                 <InputField label="Description" multiline={true} />
                 <InputField label="price" multiline={true} keyboardType='numeric' />
+                <SelectField label="Year" data={data} />
+                <SelectField label="Manufacturer" data={data} />
+                <SelectField label="Make" data={data} />
+                <SelectField label="Model" data={data} />
+                <SelectField label="Style" data={data} />
+                <SelectField label="Trim" data={data} />
+                <SelectField label="Body Type" data={data} />
+
+                <SelectField label="Fuel type" data={fuel_type} />
+                <SelectField label="Cylinder" data={data} />
+                <SelectField label="Transmission" data={transmission_type} />
+                <SelectField label="" data={data} />
                 {images.map((image, idx) => {
                     return (
+                        <View key={idx}>
                         <PhotoUpload pickImage={pickImage} index={idx} 
                         fieldName="uri"
                         image={image.uri} removeImage={() => handleRemoveImage(idx)} />
+                        </View>
                     )
                 })}
     
