@@ -1,7 +1,8 @@
 import { View, Text } from 'react-native'
 import React from 'react'
-import { SelectList, MultipleSelectList} from 'react-native-dropdown-select-list'
+import { SelectList, MultipleSelectList } from 'react-native-dropdown-select-list'
 const SelectField = (props) => {
+  
   return (
     <View>
       <Text>
@@ -15,15 +16,15 @@ const SelectField = (props) => {
           save="value"
           search={props.search}
         />) :
-        (
-                    <SelectList
-            setSelected={(value) => props.onChange(value, props.label)}
-            data={props.data}
-            save="value"
-            search={props.search}
+          (
+            <SelectList
+              setSelected={(value) => props.onChange(value, props.label)}
+              data={props.data}
+              save="value"
+              search={props.search}
 
-          />
-        )
+            />
+          )
 
       }
 

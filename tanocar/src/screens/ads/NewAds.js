@@ -15,7 +15,7 @@ const { s, c } = bootstrapStyleSheet;
 
 
 const NewAds = () => {
-    const [selected, setSelected] = useState([]);
+    const [features, setFeatures] = useState([]);
     const [adDetails, setAdDetails] = useState({})
     const [images, setImages] = useState([{ uri: "" }]);
 
@@ -31,12 +31,11 @@ const NewAds = () => {
     };
 
     const handleChangeSelect = (value, name) => {
-        console.log('select', selected)
         setAdDetails(prevState => ({ ...prevState, [name]: value }));
     };
 
     const handleChangeMultiSelect = (value) => {
-        setSelected(value);
+        setFeatures(value);
     };
 
     const pickImage = async (fieldIndex, fieldName) => {
@@ -63,15 +62,32 @@ const NewAds = () => {
         { key: 'motor-cycle', value: 'Motor Cycle' },
     ]
 
-    const feature = {feature : selected}
-    const formData = new FormData();
-    const ads_data = JSON.stringify(adDetails, feature)
-    const ad_image = JSON.stringify(images)
-    console.log('ads_data', ads_data)
-    formData.append('data', ads_data)
-    formData.append('images', ad_image)
-    formData.append('owner', 2)
-    const create_ad = () => {
+    const uploadImage = async () => {
+
+        let port_form = [...images];
+        for (let field of port_form) {
+            console.log('field', field)
+                const data = new FormData();
+            data.append("image", { uri: field.uri, name: field.uri.split('/').pop()});
+                await axios.post(API_URL + 'ads/image', data).then((res) => {
+                    console.log("image response", res.data);
+                    field.uri = res.data.image;
+                }).catch((err) => {console.log(err.response)});
+        }
+        setImages(port_form);
+    };
+
+
+
+    const create_ad = async () => {
+        await uploadImage();
+        const formData = new FormData();
+        const ads_data = JSON.stringify({ adDetails, features })
+        const ad_image = JSON.stringify(images)
+        console.log('ads_data', ads_data)
+        formData.append('data', ads_data)
+        formData.append('images', ad_image)
+        formData.append('owner', 2)
         axios
             .post(API_URL + 'ads/add', formData)
             .then((response) => alert("DONE"))
