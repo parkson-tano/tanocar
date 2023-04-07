@@ -1,8 +1,10 @@
 import { Text, View, ScrollView, TextInput, SafeAreaView, TouchableOpacity } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { Card, Button } from 'react-native-paper';
+import { CheckBox } from '@rneui/themed';
 import BootstrapStyleSheet from 'react-native-bootstrap-styles';
-import { IconButton, MD3Colors } from 'react-native-paper';
+import { IconButton, MD3Colors, ActivityIndicator, MD2Colors } from 'react-native-paper';
+
 import * as ImagePicker from "expo-image-picker";
 import InputField from '../../components/InputField';
 import PhotoUpload from '../../components/PhotoUpload';
@@ -16,8 +18,13 @@ const { s, c } = bootstrapStyleSheet;
 
 const NewAds = () => {
     const [features, setFeatures] = useState([]);
-    const [adDetails, setAdDetails] = useState({})
+    const [adDetails, setAdDetails] = useState({ negotiate: false })
     const [images, setImages] = useState([{ uri: "" }]);
+    const [submitting, setSubmitting] = useState(false);
+    const [errorTitle, setErrorTitle] = useState(false);
+    const [errorPrice, setErrorPrice] = useState(false);
+    const [errorDescription, setErrorDescription] = useState(false);
+    const [ready, setReady] = useState(false);
 
 
     const handleAddImage = () => {
@@ -67,12 +74,12 @@ const NewAds = () => {
         let port_form = [...images];
         for (let field of port_form) {
             console.log('field', field)
-                const data = new FormData();
-            data.append("image", { uri: field.uri, name: field.uri.split('/').pop()});
-                await axios.post(API_URL + 'ads/image', data).then((res) => {
-                    console.log("image response", res.data);
-                    field.uri = res.data.image;
-                }).catch((err) => {console.log(err.response)});
+            const data = new FormData();
+            data.append("image", { uri: field.uri, name: field.uri.split('/').pop() });
+            await axios.post(API_URL + 'ads/image', data).then((res) => {
+                console.log("image response", res.data);
+                field.uri = res.data.image;
+            }).catch((err) => { console.log(err.response) });
         }
         setImages(port_form);
     };
@@ -80,18 +87,34 @@ const NewAds = () => {
 
 
     const create_ad = async () => {
-        await uploadImage();
-        const formData = new FormData();
-        const ads_data = JSON.stringify({ adDetails, features })
-        const ad_image = JSON.stringify(images)
-        console.log('ads_data', ads_data)
-        formData.append('data', ads_data)
-        formData.append('images', ad_image)
-        formData.append('owner', 2)
-        axios
-            .post(API_URL + 'ads/add', formData)
-            .then((response) => alert("DONE"))
-            .catch((error) => console.log(error.response));
+        if ((adDetails.title == undefined || adDetails.title == '') 
+        || (adDetails.description == undefined || adDetails.description == '') 
+        || (adDetails.price == undefined || adDetails.price == '') 
+        || (adDetails.type == undefined || adDetails.type == '')) {
+            (adDetails.title == undefined || adDetails.title == '')  && setErrorTitle(true);
+            (adDetails.description == undefined || adDetails.description == '') && setErrorDescription(true);
+            (adDetails.price == undefined || adDetails.price == '')  && setErrorPrice(true);
+            alert("error")
+
+        }
+        else {
+            setSubmitting(true);
+            await uploadImage();
+            const formData = new FormData();
+            const ads_data = JSON.stringify({ adDetails, features })
+            const ad_image = JSON.stringify(images)
+            console.log('ads_data', ads_data)
+            formData.append('data', ads_data)
+            formData.append('images', ad_image)
+            formData.append('title', adDetails.title)
+            formData.append('description', adDetails.description)
+            formData.append('owner', 2)
+            axios
+                .post(API_URL + 'ads/add', formData)
+                .then((response) => {alert("DONE"); setSubmitting(false);})
+                .catch((error) => console.log(error.response));
+        }
+
     }
 
     return (
@@ -99,25 +122,33 @@ const NewAds = () => {
             <Text variant="headlineSmall" className="text-red-400 mx-20 text-xl p-5 font-extrabold">
                 Create New Ads
             </Text>
-
+            {submitting && <ActivityIndicator animating={submitting} color={MD2Colors.blue500} size='large' />}
             <ScrollView className="py-5 px-5" style={{ height: "90%" }}>
-                <SelectField label="Type" data={data} onChange={handleChangeSelect} search={false} />
-                <InputField label="Title" multiline={false} onChange={handleChangeSelect} />
-                <InputField label="Description" multiline={true} onChange={handleChangeSelect} />
-                <InputField label="price" multiline={true} keyboardType='numeric' onChange={handleChangeSelect} />
-                <SelectField label="Year" data={spec.year_type} onChange={handleChangeSelect} />
-                <SelectField label="Manufacturer" data={data} onChange={handleChangeSelect} />
-                <SelectField label="Make" data={data} onChange={handleChangeSelect} />
-                <SelectField label="Model" data={data} onChange={handleChangeSelect} />
-                <SelectField label="Style" data={data} onChange={handleChangeSelect} />
-                <SelectField label="Trim" data={data} onChange={handleChangeSelect} />
-                <SelectField label="Body Type" data={spec.body_type} onChange={handleChangeSelect} search={true} name="body_type" />
+                <SelectField label="type" data={data} onChange={handleChangeSelect} search={false} />
+                <InputField label="title" onChange={handleChangeSelect} error={errorTitle} />
+                <InputField label="description" multiline={true} onChange={handleChangeSelect} error={errorDescription} />
+                <InputField label="price" multiline={true} keyboardType='numeric' onChange={handleChangeSelect} error={errorPrice} />
+                <CheckBox
+                    checked={adDetails.negotiate}
+                    onPress={() => {
+                        setAdDetails(prevState => ({ ...prevState, negotiate: !adDetails.negotiate }));
+                    }}
+                    title="Negotiable"
+       
+                />
+                <SelectField label="year" data={spec.year_type} onChange={handleChangeSelect} />
+                <SelectField label="manufacturer" data={data} onChange={handleChangeSelect} />
+                <SelectField label="make" data={data} onChange={handleChangeSelect} />
+                <SelectField label="model" data={data} onChange={handleChangeSelect} />
+                <SelectField label="style" data={data} onChange={handleChangeSelect} />
+                <SelectField label="trim" data={data} onChange={handleChangeSelect} />
+                <SelectField label="body Type" data={spec.body_type} onChange={handleChangeSelect} search={true} name="body_type" />
 
-                <SelectField label="Fuel type" data={spec.fuel_type} onChange={handleChangeSelect} />
-                <SelectField label="Cylinder" data={spec.cylinders_type} onChange={handleChangeSelect} />
-                <SelectField label="Transmission" data={spec.transmission_type} onChange={handleChangeSelect} />
-                <SelectField label="Feature" data={spec.car_feature} multi={true} onChange={handleChangeMultiSelect} />
-                <SelectField label="Drive" data={spec.drive_type} onChange={handleChangeSelect} />
+                <SelectField label="fuel type" data={spec.fuel_type} onChange={handleChangeSelect} />
+                <SelectField label="cylinder" data={spec.cylinders_type} onChange={handleChangeSelect} />
+                <SelectField label="transmission" data={spec.transmission_type} onChange={handleChangeSelect} />
+                <SelectField label="feature" data={spec.car_feature} multi={true} onChange={handleChangeMultiSelect} />
+                <SelectField label="drive" data={spec.drive_type} onChange={handleChangeSelect} />
 
                 {images.map((image, idx) => {
                     return (
@@ -144,15 +175,15 @@ const NewAds = () => {
                         <Text className='text-gray-400 text-lg'>Add Photo</Text>
                     </View>
                 </View>
-                <TouchableOpacity>
-                    <Button className="mb-10 p-2 bg-blue-200" onPress={create_ad}>
-                        <Text className='text-2xl uppercase text-red-400 font-extrabold'>
+                
+                    <Button className="mb-10 bg-blue-200" onPress={create_ad}>
+                        <Text className='text-2xl uppercase text-red-400 font-extrabold p-3'>
                             Create Ads
                         </Text>
 
                     </Button>
 
-                </TouchableOpacity>
+          
 
             </ScrollView>
 

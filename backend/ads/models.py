@@ -9,6 +9,7 @@ class Ad(models.Model):
         User, on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=50, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
+    price = models.IntegerField(default=0)
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, null=True, blank=True)
     data = models.JSONField(null=True, blank=True)

@@ -9,8 +9,8 @@ export default function App() {
     <SafeAreaView>
       {/* <LoginScreen /> */}
       {/* <RegisterScreen /> */}
-      {/* <HomeScreen /> */}
-      <NewAds />
+      <HomeScreen />
+      {/* <NewAds /> */}
     </SafeAreaView>
   );
 }

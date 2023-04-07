@@ -11,6 +11,8 @@ export default function InputField({
     onChange,
     value,
     multiline,
+    error,
+    disabled
 }) {
     return (
         <View>
@@ -18,14 +20,15 @@ export default function InputField({
             <TextInput
                 label={label}
                 placeholder={label}
-                className="mt-3"
                 mode="outlined"
                 keyboardType={keyboardType}
                 multiline={multiline}
                 onChangeText={(value) => onChange(value, label)}
                 outlineColor='black'
-                activeOutlineColor="blue"
                 value={value}
+                className="my-2"
+                error={error}
+                disabled={disabled}
             />
             {/* {!value && (
         <Text style={{ color: "red" }}>Fill this field</Text>

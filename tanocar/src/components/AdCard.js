@@ -1,43 +1,66 @@
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Image, ScrollView } from 'react-native'
 import React from 'react'
-import { Text, Card, Button, Icon } from '@rneui/themed';
+import { Avatar, Button, Card, Text, List, MD3Colors, Chip } from 'react-native-paper';
 
+import BootstrapStyleSheet from 'react-native-bootstrap-styles';
+const bootstrapStyleSheet = new BootstrapStyleSheet();
+const { s, c } = bootstrapStyleSheet;
+import { NumericFormat } from 'react-number-format';
+
+import { PatternFormat } from 'react-number-format';
+
+const LeftContent = props => <Avatar.Icon {...props} icon="car" />
 
 const AdCard = (props) => {
+    const [expanded, setExpanded] = React.useState(true);
+
+    const handlePress = () => setExpanded(!expanded);
+    const number = props.price;
+    const formattedNumber = number.toLocaleString("en-US", {
+        useGrouping: true,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+        currency: "USD",
+    });
     return (
-        <View>
-            <Card>
-                <Card.Title>{props.title}</Card.Title>
-                <Card.Divider />
-                <Card.Image
-                    style={{ padding: 0, height: 200 }}
-                    source={{
-                        uri: `${props.image}`,
-                    }}
-                />
-                
-                <Text style={{ marginBottom: 10, fontSize:20 }}>
-                    {props.price} FCFA
-                </Text>
-                <Text style={{ marginBottom: 10 }}>
-                    {props.description}
-                </Text>
-                <Button
-                    icon={
-                        <Icon
-                            name="code"
-                            color="#ffffff"
-                            iconStyle={{ marginRight: 10 }}
-                        />
-                    }
-                    buttonStyle={{
-                        borderRadius: 0,
-                        marginLeft: 0,
-                        marginRight: 0,
-                        marginBottom: 0,
-                    }}
-                    title="See More"
-                />
+        <View className="mt-5">
+            <Card style={{ borderRadius: 10 }}>
+                <Card.Title title={props.title}
+                    titleStyle={{ fontSize: 25, textTransform: 'capitalize', fontWeight: 'bold' }}
+                    subtitle={props.description}
+                    subtitleStyle={{ fontSize: 15, textTransform: 'capitalize' }}
+                    left={LeftContent} />
+
+                <View className="flex-1 bg-white rounded-lg shadow-md">
+                    <Image
+                        src={props.image}
+                        resizeMode="contain"
+                        className="w-full h-64 min-h-auto max-h-screen"
+                    />
+                    <View className="mt-4 p-5">
+                        
+                        <Text className="text-xl font-bold text-gray-800">
+                            {formattedNumber}
+                        </Text>
+                    </View>
+                </View>
+                <View className="flex-1 bg-white rounded-lg shadow-md">
+                    <List.Accordion
+                        title="Extra Features"
+                        left={props => <List.Icon {...props} icon="engine" />}>
+                        {
+                            props.features?.map(feature => (
+
+                                <List.Item
+                                    title={feature} left={props =>
+                                        <List.Icon {...props} icon="car" />} />
+                            ))
+                        }
+
+
+                    </List.Accordion>
+                </View>
+
             </Card>
         </View>
     )
