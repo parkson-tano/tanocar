@@ -5,10 +5,13 @@ import { Button, CheckBox } from '@rneui/themed';
 import SocialButton from '../../components/SocialButton'
 import axios from 'axios'
 import { API_URL } from '../../api/index';
-
+import { AuthContext } from '../../context/AuthContext';
+import { AxiosContext } from "../../context/AxiosContext";
+import * as Keychain from "react-native-keychain";
+import { useNavigation } from "@react-navigation/native";
 
 const RegisterScreen = () => {
-
+    const navigation = useNavigation();
     const deviceWidth = Dimensions.get('window').width;
 
     const [credentials, setCredentials] = useState({
@@ -130,9 +133,20 @@ const RegisterScreen = () => {
                 />
 
 
-                <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 10 }}>
-                    Already have an account ? <Text style={{ color: '#A5D7E8', fontSize: 20, fontWeight: 'bold' }}>Login</Text>
-                </Text>
+                <View
+                    style={{
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        marginBottom: 30,
+                    }}
+                >
+                    <Text>Alreadu Have an Account?</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                        <Text style={{ color: "#AD40AF", fontWeight: "700" }}>
+                            Login
+                        </Text>
+                    </TouchableOpacity>
+                </View>
 
             </View>
             <Text style={{ textAlign: 'center', marginTop: 20, fontSize: 30, fontWeight: 'bold' }}>

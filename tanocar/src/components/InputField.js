@@ -18,8 +18,8 @@ export default function InputField({
         <View>
 
             <TextInput
-                label={label}
-                placeholder={label}
+                label={label.toUpperCase()}
+                placeholder={label.toUpperCase()}
                 mode="outlined"
                 keyboardType={keyboardType}
                 multiline={multiline}

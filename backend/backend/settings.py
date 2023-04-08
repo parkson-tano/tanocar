@@ -154,7 +154,7 @@ REST_FRAMEWORK = {
 
 
 }
-
+CSRF_TRUSTED_ORIGINS = ['https://tanocar-production.up.railway.app']
 CORS_ALLOW_ALL_ORIGINS = True
 AUTH_USER_MODEL = 'auths.User'
 

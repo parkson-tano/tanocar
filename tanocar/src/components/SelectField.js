@@ -6,7 +6,7 @@ const SelectField = (props) => {
   return (
     <View>
       <Text className="my-2 font-bold text-lg">
-        {props.label}
+        {props.label.toUpperCase()}
       </Text>
       {
         props.multi ? (<MultipleSelectList

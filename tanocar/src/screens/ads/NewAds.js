@@ -12,11 +12,18 @@ import SelectField from '../../components/SelectField';
 import axios from "axios";
 import * as spec from '../../utilities/data';
 import { API_URL } from '../../api';
+
+import { AuthContext } from '../../context/AuthContext';
+import { AxiosContext } from "../../context/AxiosContext";
+import * as Keychain from "react-native-keychain";
+import { useNavigation } from "@react-navigation/native";
+
 const bootstrapStyleSheet = new BootstrapStyleSheet();
 const { s, c } = bootstrapStyleSheet;
 
 
 const NewAds = () => {
+    const navigation = useNavigation();
     const [features, setFeatures] = useState([]);
     const [adDetails, setAdDetails] = useState({ negotiate: false })
     const [images, setImages] = useState([{ uri: "" }]);
@@ -108,10 +115,13 @@ const NewAds = () => {
             formData.append('images', ad_image)
             formData.append('title', adDetails.title)
             formData.append('description', adDetails.description)
+            formData.append('price', adDetails.price)
             formData.append('owner', 2)
             axios
                 .post(API_URL + 'ads/add', formData)
-                .then((response) => {alert("DONE"); setSubmitting(false);})
+                .then((response) => {alert("DONE"); setSubmitting(false);
+                    navigation.navigate("Home")
+            })
                 .catch((error) => console.log(error.response));
         }
 
